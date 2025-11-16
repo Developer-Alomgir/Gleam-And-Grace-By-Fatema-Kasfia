@@ -285,7 +285,7 @@
             right: -2px;
             bottom: -2px;
             background: linear-gradient(45deg, #1d4e89, #00111c, #001523, #0f80aa);
-            border-radius: 50px;
+            border-radius: 20px;
             z-index: -1;
             background-size: 300% 300%;
             animation: gradient 6s linear infinite;
@@ -444,11 +444,11 @@
         }
 
         .carousel-track:hover {
-            animation-play-state: paused;
+            animation-play-state: play;
         }
 
         .carousel-track.no-animation {
-            animation: none;
+            animation: play;
         }
 
         @keyframes scroll {
