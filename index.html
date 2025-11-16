@@ -24,14 +24,14 @@
             border-radius: 50%;
             filter: blur(80px);
             opacity: 0.3;
-            animation: float 20s infinite ease-in-out;
+            animation: float 20s infinite;
             z-index: 0;
         }
 
         .blob1 {
             width: 400px;
             height: 400px;
-            background: linear-gradient(45deg, #8b5cf6, #ec4899);
+            background: #f093fb;
             top: -100px;
             left: -100px;
             animation-delay: 0s;
@@ -40,16 +40,16 @@
         .blob2 {
             width: 350px;
             height: 350px;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            background: #4facfe;
             bottom: -100px;
             right: -100px;
-            animation-delay: 7s;
+            animation-delay: 4s;
         }
 
         .blob3 {
             width: 300px;
             height: 300px;
-            background: linear-gradient(45deg, #ec4899, #f59e0b);
+            background: #43e97b;
             top: 50%;
             left: 50%;
             animation-delay: 14s;
@@ -134,10 +134,10 @@
             height: 40px;
             display: inline-block;
             border-right: 2px solid #a78bfa;
-            animation: blink 0.7s infinite;
+            animation: shimmer 3s linear infinite;
         }
 
-        @keyframes blink {
+        @keyframes shimmer {
             0%, 100% { border-color: transparent; }
             50% { border-color: #a78bfa; }
         }
@@ -267,7 +267,7 @@
         }
 
         .product-card {
-            background: rgba(26, 10, 46, 0.6);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             padding: 20px;
             position: relative;
@@ -298,7 +298,9 @@
         }
 
         .product-card:hover {
-            transform: translateY(-10px) scale(1.02);
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            border-color: #667eea;
         }
 
         .product-image-container {
@@ -496,7 +498,9 @@
         }
 
         .exclusive-card:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) translateY(-10px);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            border-color: #667eea;
         }
 
         .exclusive-badge {
