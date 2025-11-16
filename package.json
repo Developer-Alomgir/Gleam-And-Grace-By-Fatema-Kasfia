@@ -1,0 +1,23 @@
+{
+  "name": "gleam-geace-shop",
+  "version": "1.0.0",
+  "description": "A stunning e-commerce web shop for jewelry and cosmetics",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "ecommerce",
+    "jewelry",
+    "cosmetics",
+    "shop",
+    "webshop"
+  ],
+  "author": "ALOMGIR HOSSEN",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/gleam-geace-shop.git"
+  }
+}
