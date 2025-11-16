@@ -795,6 +795,62 @@
             color: #a78bfa;
         }
 
+        /* Storage Management Panel */
+        .storage-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(26, 10, 46, 0.95);
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(139, 92, 246, 0.5);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            max-width: 300px;
+        }
+
+        .storage-panel h4 {
+            margin: 0 0 10px 0;
+            color: #8b5cf6;
+            font-size: 0.9em;
+        }
+
+        .storage-info {
+            font-size: 0.85em;
+            color: #d1d5db;
+            margin-bottom: 10px;
+        }
+
+        .storage-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .storage-btn {
+            padding: 8px 15px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.5);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s;
+        }
+
+        .storage-btn:hover {
+            background: rgba(139, 92, 246, 0.4);
+        }
+
+        .storage-btn.danger {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .storage-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.4);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero h1 {
@@ -860,6 +916,13 @@
             .hero-image-container {
                 width: 150px;
                 height: 150px;
+            }
+
+            .storage-panel {
+                left: 10px;
+                bottom: 10px;
+                max-width: 250px;
+                padding: 12px 15px;
             }
         }
 
@@ -988,6 +1051,19 @@
         </div>
     </div>
 
+    <!-- Storage Management Panel -->
+    <div class="storage-panel" id="storagePanel">
+        <h4>💾 Storage Info</h4>
+        <div class="storage-info">
+            <p>📸 Images: <span id="imageCount">0</span></p>
+            <p>📦 Orders: <span id="orderCount">0</span></p>
+        </div>
+        <div class="storage-actions">
+            <button class="storage-btn" onclick="viewStorageDetails()">View All</button>
+            <button class="storage-btn danger" onclick="clearAllStorage()">Clear All</button>
+        </div>
+    </div>
+
     <!-- Cart Modal -->
     <div class="modal" id="cartModal">
         <div class="modal-content">
@@ -1108,13 +1184,177 @@
         let orderCounter = 1000;
         let orders = {};
         let currentFilter = 'all';
+        let db;
 
-        // Hero Image Upload with LocalStorage
-        document.getElementById('heroImageUpload').addEventListener('change', function(e) {
+        // Initialize IndexedDB
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('GleamGeaceDB', 1);
+                
+                request.onerror = () => {
+                    console.error('Database failed to open');
+                    reject(request.error);
+                };
+                
+                request.onsuccess = () => {
+                    db = request.result;
+                    console.log('Database opened successfully');
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (e) => {
+                    db = e.target.result;
+                    
+                    // Create object stores
+                    if (!db.objectStoreNames.contains('images')) {
+                        const imageStore = db.createObjectStore('images', { keyPath: 'id' });
+                        imageStore.createIndex('type', 'type', { unique: false });
+                    }
+                    
+                    if (!db.objectStoreNames.contains('orders')) {
+                        db.createObjectStore('orders', { keyPath: 'id' });
+                    }
+                    
+                    console.log('Database setup complete');
+                };
+            });
+        }
+
+        // Save image to IndexedDB
+        async function saveImageToDB(id, imageData, type = 'product') {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['images'], 'readwrite');
+                const objectStore = transaction.objectStore('images');
+                
+                const imageObject = {
+                    id: id,
+                    data: imageData,
+                    type: type,
+                    timestamp: new Date().toISOString()
+                };
+                
+                const request = objectStore.put(imageObject);
+                
+                request.onsuccess = () => {
+                    console.log(`Image ${id} saved to IndexedDB`);
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    console.error('Error saving image:', request.error);
+                    reject(request.error);
+                };
+            });
+        }
+
+        // Load image from IndexedDB
+        async function loadImageFromDB(id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['images'], 'readonly');
+                const objectStore = transaction.objectStore('images');
+                const request = objectStore.get(id);
+                
+                request.onsuccess = () => {
+                    if (request.result) {
+                        resolve(request.result.data);
+                    } else {
+                        resolve(null);
+                    }
+                };
+                
+                request.onerror = () => {
+                    console.error('Error loading image:', request.error);
+                    reject(request.error);
+                };
+            });
+        }
+
+        // Delete image from IndexedDB
+        async function deleteImageFromDB(id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['images'], 'readwrite');
+                const objectStore = transaction.objectStore('images');
+                const request = objectStore.delete(id);
+                
+                request.onsuccess = () => {
+                    console.log(`Image ${id} deleted from IndexedDB`);
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    console.error('Error deleting image:', request.error);
+                    reject(request.error);
+                };
+            });
+        }
+
+        // Get all images from IndexedDB
+        async function getAllImagesFromDB() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['images'], 'readonly');
+                const objectStore = transaction.objectStore('images');
+                const request = objectStore.getAll();
+                
+                request.onsuccess = () => {
+                    resolve(request.result);
+                };
+                
+                request.onerror = () => {
+                    console.error('Error loading all images:', request.error);
+                    reject(request.error);
+                };
+            });
+        }
+
+        // Save order to IndexedDB
+        async function saveOrderToDB(order) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['orders'], 'readwrite');
+                const objectStore = transaction.objectStore('orders');
+                const request = objectStore.put(order);
+                
+                request.onsuccess = () => {
+                    console.log(`Order ${order.id} saved to IndexedDB`);
+                    resolve();
+                };
+                
+                request.onerror = () => {
+                    console.error('Error saving order:', request.error);
+                    reject(request.error);
+                };
+            });
+        }
+
+        // Load order from IndexedDB
+        async function loadOrderFromDB(orderId) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['orders'], 'readonly');
+                const objectStore = transaction.objectStore('orders');
+                const request = objectStore.get(orderId);
+                
+                request.onsuccess = () => {
+                    resolve(request.result || null);
+                };
+                
+                request.onerror = () => {
+                    console.error('Error loading order:', request.error);
+                    reject(request.error);
+                };
+            });
+        }
+
+        // Hero Image Upload with IndexedDB
+        document.getElementById('heroImageUpload').addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (file) {
+                // Check file size (limit to 5MB for performance)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image too large! Please choose an image smaller than 5MB.');
+                    return;
+                }
+
                 const reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = async function(event) {
                     const heroImage = document.getElementById('heroImage');
                     const placeholder = document.getElementById('heroPlaceholder');
                     const imageData = event.target.result;
@@ -1123,13 +1363,13 @@
                     heroImage.classList.add('active');
                     placeholder.style.display = 'none';
                     
-                    // Save to LocalStorage
+                    // Save to IndexedDB
                     try {
-                        localStorage.setItem('heroImage', imageData);
-                        showNotification('Shop logo saved!');
-                    } catch (e) {
-                        console.error('Image too large for localStorage');
-                        showNotification('Image saved temporarily (too large to persist)');
+                        await saveImageToDB('hero-logo', imageData, 'hero');
+                        showNotification('✅ Shop logo saved successfully!');
+                    } catch (error) {
+                        console.error('Error saving hero image:', error);
+                        showNotification('⚠️ Error saving image');
                     }
                 };
                 reader.readAsDataURL(file);
@@ -1137,19 +1377,20 @@
         });
 
         // Load hero image on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            const savedHeroImage = localStorage.getItem('heroImage');
-            if (savedHeroImage) {
-                const heroImage = document.getElementById('heroImage');
-                const placeholder = document.getElementById('heroPlaceholder');
-                heroImage.src = savedHeroImage;
-                heroImage.classList.add('active');
-                placeholder.style.display = 'none';
+        async function loadHeroImage() {
+            try {
+                const imageData = await loadImageFromDB('hero-logo');
+                if (imageData) {
+                    const heroImage = document.getElementById('heroImage');
+                    const placeholder = document.getElementById('heroPlaceholder');
+                    heroImage.src = imageData;
+                    heroImage.classList.add('active');
+                    placeholder.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error loading hero image:', error);
             }
-            
-            // Load product images
-            loadProductImages();
-        });
+        }
 
         function filterProducts(category) {
             currentFilter = category;
@@ -1355,7 +1596,7 @@
             const orderId = `ORD${orderCounter++}`;
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-            orders[orderId] = {
+            const order = {
                 id: orderId,
                 items: [...cart],
                 customer: { name, phone, email, address, notes },
@@ -1365,6 +1606,14 @@
                 date: new Date().toLocaleString()
             };
 
+            // Save to IndexedDB
+            saveOrderToDB(order).then(() => {
+                console.log('Order saved to IndexedDB');
+            }).catch(error => {
+                console.error('Error saving order:', error);
+            });
+
+            orders[orderId] = order;
             cart = [];
             updateCartUI();
             toggleCart();
@@ -1393,39 +1642,48 @@
                 return;
             }
 
-            const order = orders[trackingId];
+            // Try to load from IndexedDB first
+            loadOrderFromDB(trackingId).then(order => {
+                if (!order) {
+                    // Fallback to memory
+                    order = orders[trackingId];
+                }
 
-            if (!order) {
-                resultDiv.innerHTML = '<p style="color: #ef4444;">Order not found. Please check your order ID.</p>';
-                return;
-            }
+                if (!order) {
+                    resultDiv.innerHTML = '<p style="color: #ef4444;">Order not found. Please check your order ID.</p>';
+                    return;
+                }
 
-            const statusSteps = [
-                { name: 'Order Placed', completed: true },
-                { name: 'Processing', completed: order.status !== 'Order Placed' },
-                { name: 'Out for Delivery', completed: order.status === 'Delivered' },
-                { name: 'Delivered', completed: order.status === 'Delivered' }
-            ];
+                const statusSteps = [
+                    { name: 'Order Placed', completed: true },
+                    { name: 'Processing', completed: order.status !== 'Order Placed' },
+                    { name: 'Out for Delivery', completed: order.status === 'Delivered' },
+                    { name: 'Delivered', completed: order.status === 'Delivered' }
+                ];
 
-            resultDiv.innerHTML = `
-                <div class="order-status">
-                    <h3>Order: ${order.id}</h3>
-                    <p>Date: ${order.date}</p>
-                    <p>Total: ৳${order.total}</p>
-                    <p>Payment: ${order.payment === 'bkash' ? 'Bkash' : 'Cash on Delivery'}</p>
-                    <hr style="margin: 20px 0; border-color: rgba(139, 92, 246, 0.3);">
-                    ${statusSteps.map(step => `
-                        <div class="status-step">
-                            <div class="status-icon ${step.completed ? 'completed' : ''}">
-                                ${step.completed ? '✓' : '○'}
+                resultDiv.innerHTML = `
+                    <div class="order-status">
+                        <h3>Order: ${order.id}</h3>
+                        <p>Date: ${order.date}</p>
+                        <p>Total: ৳${order.total}</p>
+                        <p>Payment: ${order.payment === 'bkash' ? 'Bkash' : 'Cash on Delivery'}</p>
+                        <hr style="margin: 20px 0; border-color: rgba(139, 92, 246, 0.3);">
+                        ${statusSteps.map(step => `
+                            <div class="status-step">
+                                <div class="status-icon ${step.completed ? 'completed' : ''}">
+                                    ${step.completed ? '✓' : '○'}
+                                </div>
+                                <div>
+                                    <strong>${step.name}</strong>
+                                </div>
                             </div>
-                            <div>
-                                <strong>${step.name}</strong>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
+                        `).join('')}
+                    </div>
+                `;
+            }).catch(error => {
+                console.error('Error tracking order:', error);
+                resultDiv.innerHTML = '<p style="color: #ef4444;">Error loading order. Please try again.</p>';
+            });
         }
 
         function showNotification(message) {
@@ -1452,8 +1710,100 @@
         }
 
         // Initialize
-        renderProducts();
-        initCarouselDrag();
+        initDB().then(() => {
+            console.log('IndexedDB initialized successfully');
+            renderProducts();
+            loadHeroImage();
+            // Load product images after a short delay to ensure DOM is ready
+            setTimeout(loadProductImages, 500);
+            initCarouselDrag();
+            updateStorageInfo();
+        }).catch(error => {
+            console.error('Error initializing IndexedDB:', error);
+            alert('Error initializing database. Some features may not work properly.');
+            renderProducts();
+            initCarouselDrag();
+        });
+
+        // Update storage info panel
+        async function updateStorageInfo() {
+            try {
+                const images = await getAllImagesFromDB();
+                document.getElementById('imageCount').textContent = images.length;
+                
+                // Count orders
+                const transaction = db.transaction(['orders'], 'readonly');
+                const objectStore = transaction.objectStore('orders');
+                const countRequest = objectStore.count();
+                
+                countRequest.onsuccess = () => {
+                    document.getElementById('orderCount').textContent = countRequest.result;
+                };
+            } catch (error) {
+                console.error('Error updating storage info:', error);
+            }
+        }
+
+        // View storage details
+        async function viewStorageDetails() {
+            try {
+                const images = await getAllImagesFromDB();
+                const totalSize = images.reduce((sum, img) => {
+                    return sum + (img.data.length * 0.75 / 1024 / 1024); // Convert base64 to approximate MB
+                }, 0);
+                
+                const details = `
+📊 Storage Details:
+
+📸 Total Images: ${images.length}
+💾 Estimated Size: ${totalSize.toFixed(2)} MB
+📦 Total Orders: ${Object.keys(orders).length}
+
+Storage Capacity: ~50 MB available
+
+Images by type:
+- Hero Logo: ${images.filter(i => i.type === 'hero').length}
+- Product Images: ${images.filter(i => i.type === 'product').length}
+                `;
+                
+                alert(details);
+            } catch (error) {
+                console.error('Error viewing storage details:', error);
+                alert('Error loading storage details');
+            }
+        }
+
+        // Clear all storage
+        async function clearAllStorage() {
+            if (!confirm('⚠️ Are you sure you want to delete ALL images and orders? This cannot be undone!')) {
+                return;
+            }
+
+            try {
+                // Clear images
+                const imageTransaction = db.transaction(['images'], 'readwrite');
+                const imageStore = imageTransaction.objectStore('images');
+                await imageStore.clear();
+                
+                // Clear orders
+                const orderTransaction = db.transaction(['orders'], 'readwrite');
+                const orderStore = orderTransaction.objectStore('orders');
+                await orderStore.clear();
+                
+                // Reset in-memory data
+                orders = {};
+                
+                showNotification('✅ All data cleared successfully!');
+                
+                // Reload page
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            } catch (error) {
+                console.error('Error clearing storage:', error);
+                alert('Error clearing storage. Please try again.');
+            }
+        }
 
         // Carousel Drag/Touch Functionality
         function initCarouselDrag() {
