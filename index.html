@@ -382,6 +382,16 @@
             margin: 50px 0;
             background: rgba(139, 92, 246, 0.05);
             border-radius: 20px;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .carousel-container:active {
+            cursor: grabbing;
+        }
+
+        .carousel-container.dragging .carousel-track {
+            animation-play-state: paused;
         }
 
         .carousel-container::before,
@@ -433,6 +443,10 @@
 
         .carousel-track:hover {
             animation-play-state: paused;
+        }
+
+        .carousel-track.no-animation {
+            animation: none;
         }
 
         @keyframes scroll {
@@ -780,6 +794,102 @@
             padding: 40px 20px;
             color: #a78bfa;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .typewriter {
+                font-size: 1.2em;
+            }
+
+            .section-header {
+                font-size: 2em;
+            }
+
+            .category-filter {
+                gap: 10px;
+            }
+
+            .category-btn {
+                padding: 10px 20px;
+                font-size: 0.85em;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+
+            .exclusive-card,
+            .carousel-track > div {
+                min-width: 280px;
+            }
+
+            .cart-btn {
+                top: 10px;
+                right: 10px;
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .payment-options {
+                flex-direction: column;
+            }
+
+            .shop-details {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .hero-image-container {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .typewriter {
+                font-size: 1em;
+            }
+
+            .section-header {
+                font-size: 1.5em;
+            }
+
+            .category-btn {
+                padding: 8px 15px;
+                font-size: 0.8em;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .exclusive-card,
+            .carousel-track > div {
+                min-width: 250px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -819,6 +929,12 @@
             <button class="category-btn active" onclick="filterProducts('all')">All Products</button>
             <button class="category-btn" onclick="filterProducts('jewelry')">💎 Jewelry</button>
             <button class="category-btn" onclick="filterProducts('cosmetics')">💄 Cosmetics</button>
+            <button class="category-btn" onclick="filterProducts('watch')">⌚ Watch</button>
+            <button class="category-btn" onclick="filterProducts('bag')">👜 Bag</button>
+            <button class="category-btn" onclick="filterProducts('pendant')">📿 Pendants</button>
+            <button class="category-btn" onclick="filterProducts('ring')">💍 Rings</button>
+            <button class="category-btn" onclick="filterProducts('earring')">👂 Earrings</button>
+            <button class="category-btn" onclick="filterProducts('crafting')">🎨 Crafting</button>
         </div>
 
         <h2 class="section-header">Featured Products</h2>
@@ -959,19 +1075,32 @@
         // Products Data
         const products = [
             { id: 1, name: 'Diamond Necklace', price: 15000, category: 'jewelry', featured: true },
-            { id: 2, name: 'Gold Earrings', price: 8000, category: 'jewelry', featured: true },
+            { id: 2, name: 'Gold Earrings', price: 8000, category: 'earring', featured: true },
             { id: 3, name: 'Premium Lipstick', price: 1200, category: 'cosmetics', featured: true },
             { id: 4, name: 'Pearl Bracelet', price: 5000, category: 'jewelry', featured: true },
             { id: 5, name: 'Face Serum', price: 2500, category: 'cosmetics', featured: true },
-            { id: 6, name: 'Ruby Ring', price: 12000, category: 'jewelry', featured: true },
-            { id: 7, name: 'Luxury Watch', price: 25000, category: 'jewelry', exclusive: true },
+            { id: 6, name: 'Ruby Ring', price: 12000, category: 'ring', featured: true },
+            { id: 15, name: 'Luxury Watch', price: 18000, category: 'watch', featured: true },
+            { id: 16, name: 'Designer Handbag', price: 9500, category: 'bag', featured: true },
+            { id: 17, name: 'Emerald Pendant', price: 14000, category: 'pendant', featured: true },
+            { id: 18, name: 'Diamond Ring', price: 22000, category: 'ring', featured: true },
+            { id: 19, name: 'Crystal Earrings', price: 6000, category: 'earring', featured: true },
+            { id: 20, name: 'Handmade Beads', price: 1500, category: 'crafting', featured: true },
+            { id: 7, name: 'Premium Watch', price: 25000, category: 'watch', exclusive: true },
             { id: 8, name: 'Designer Perfume', price: 5000, category: 'cosmetics', exclusive: true },
             { id: 9, name: 'Platinum Chain', price: 30000, category: 'jewelry', exclusive: true },
             { id: 10, name: 'Premium Makeup Kit', price: 8000, category: 'cosmetics', exclusive: true },
-            { id: 11, name: 'Emerald Pendant', price: 35000, category: 'jewelry', luxury: true },
+            { id: 21, name: 'Leather Bag', price: 15000, category: 'bag', exclusive: true },
+            { id: 22, name: 'Gold Pendant', price: 18000, category: 'pendant', exclusive: true },
+            { id: 11, name: 'Sapphire Pendant', price: 35000, category: 'pendant', luxury: true },
             { id: 12, name: 'Anti-Aging Cream', price: 6500, category: 'cosmetics', luxury: true },
             { id: 13, name: 'Sapphire Brooch', price: 28000, category: 'jewelry', luxury: true },
-            { id: 14, name: 'Luxury Skincare Set', price: 12000, category: 'cosmetics', luxury: true }
+            { id: 14, name: 'Luxury Skincare Set', price: 12000, category: 'cosmetics', luxury: true },
+            { id: 23, name: 'Swiss Watch', price: 45000, category: 'watch', luxury: true },
+            { id: 24, name: 'Designer Bag', price: 32000, category: 'bag', luxury: true },
+            { id: 25, name: 'Platinum Ring', price: 38000, category: 'ring', luxury: true },
+            { id: 26, name: 'Pearl Earrings', price: 15000, category: 'earring', luxury: true },
+            { id: 27, name: 'Premium Craft Kit', price: 8500, category: 'crafting', luxury: true }
         ];
 
         let cart = [];
@@ -980,7 +1109,7 @@
         let orders = {};
         let currentFilter = 'all';
 
-        // Hero Image Upload
+        // Hero Image Upload with LocalStorage
         document.getElementById('heroImageUpload').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -988,12 +1117,38 @@
                 reader.onload = function(event) {
                     const heroImage = document.getElementById('heroImage');
                     const placeholder = document.getElementById('heroPlaceholder');
-                    heroImage.src = event.target.result;
+                    const imageData = event.target.result;
+                    
+                    heroImage.src = imageData;
                     heroImage.classList.add('active');
                     placeholder.style.display = 'none';
+                    
+                    // Save to LocalStorage
+                    try {
+                        localStorage.setItem('heroImage', imageData);
+                        showNotification('Shop logo saved!');
+                    } catch (e) {
+                        console.error('Image too large for localStorage');
+                        showNotification('Image saved temporarily (too large to persist)');
+                    }
                 };
                 reader.readAsDataURL(file);
             }
+        });
+
+        // Load hero image on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedHeroImage = localStorage.getItem('heroImage');
+            if (savedHeroImage) {
+                const heroImage = document.getElementById('heroImage');
+                const placeholder = document.getElementById('heroPlaceholder');
+                heroImage.src = savedHeroImage;
+                heroImage.classList.add('active');
+                placeholder.style.display = 'none';
+            }
+            
+            // Load product images
+            loadProductImages();
         });
 
         function filterProducts(category) {
@@ -1298,6 +1453,91 @@
 
         // Initialize
         renderProducts();
+        initCarouselDrag();
+
+        // Carousel Drag/Touch Functionality
+        function initCarouselDrag() {
+            const carousels = document.querySelectorAll('.carousel-container');
+            
+            carousels.forEach(carousel => {
+                const track = carousel.querySelector('.carousel-track');
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+                let velocity = 0;
+                let lastX = 0;
+                let lastTime = Date.now();
+
+                // Mouse events
+                carousel.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    carousel.classList.add('dragging');
+                    track.classList.add('no-animation');
+                    startX = e.pageX - carousel.offsetLeft;
+                    scrollLeft = track.style.transform ? 
+                        parseInt(track.style.transform.replace(/[^\d-]/g, '')) : 0;
+                    lastX = e.pageX;
+                    lastTime = Date.now();
+                });
+
+                carousel.addEventListener('mouseleave', () => {
+                    if (isDown) {
+                        isDown = false;
+                        carousel.classList.remove('dragging');
+                        track.classList.remove('no-animation');
+                    }
+                });
+
+                carousel.addEventListener('mouseup', () => {
+                    isDown = false;
+                    carousel.classList.remove('dragging');
+                    track.classList.remove('no-animation');
+                });
+
+                carousel.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - carousel.offsetLeft;
+                    const walk = (x - startX);
+                    track.style.transform = `translateX(${scrollLeft + walk}px)`;
+                    
+                    const now = Date.now();
+                    velocity = (e.pageX - lastX) / (now - lastTime);
+                    lastX = e.pageX;
+                    lastTime = now;
+                });
+
+                // Touch events for mobile
+                carousel.addEventListener('touchstart', (e) => {
+                    isDown = true;
+                    carousel.classList.add('dragging');
+                    track.classList.add('no-animation');
+                    startX = e.touches[0].pageX - carousel.offsetLeft;
+                    scrollLeft = track.style.transform ? 
+                        parseInt(track.style.transform.replace(/[^\d-]/g, '')) : 0;
+                    lastX = e.touches[0].pageX;
+                    lastTime = Date.now();
+                }, { passive: true });
+
+                carousel.addEventListener('touchend', () => {
+                    isDown = false;
+                    carousel.classList.remove('dragging');
+                    track.classList.remove('no-animation');
+                }, { passive: true });
+
+                carousel.addEventListener('touchmove', (e) => {
+                    if (!isDown) return;
+                    const x = e.touches[0].pageX - carousel.offsetLeft;
+                    const walk = (x - startX);
+                    track.style.transform = `translateX(${scrollLeft + walk}px)`;
+                    
+                    const now = Date.now();
+                    velocity = (e.touches[0].pageX - lastX) / (now - lastTime);
+                    lastX = e.touches[0].pageX;
+                    lastTime = now;
+                }, { passive: true });
+            });
+        }
 
         // Add animations
         const style = document.createElement('style');
