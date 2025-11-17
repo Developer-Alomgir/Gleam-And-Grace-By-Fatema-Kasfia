@@ -1348,13 +1348,13 @@
             const address = document.getElementById('customerAddress').value.trim();
             const notes = document.getElementById('orderNotes').value.trim();
 
-            if (!name || !phone || !address) {
+            if (!email || !phone || !address) {
                 alert('সব ফাঁকা ঘর পূরণ করো ভাই!😴 (নাম, ফোন, ঠিকানা দরকার)😎 নইলে তোমার পার্সেল প্রতিবেশীর বাড়িতে চলে যাবে।!🏃‍♂️');
                 return;
             }
 
             // Validate phone number
-            if (phone.length < 11) {
+            if (phone.length < 10) {
                 alert('আরে মামা তুমি ভুল নম্বরটা লিখেছো, আবার চেক করো।!');
                 return;
             }
