@@ -1560,5 +1560,25 @@
         `;
         document.head.appendChild(style);
     </script>
+
+<!-- AOS Scroll Animation -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({duration:900, once:true});</script>
+
+<!-- Lenis Smooth Scroll -->
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+<script>
+const lenis = new Lenis()
+function raf(time){ lenis.raf(time); requestAnimationFrame(raf) }
+requestAnimationFrame(raf)
+</script>
+
+<!-- GSAP Hero Animation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+<script>
+gsap.from('.hero', {opacity:0, y:40, duration:1.2, ease:'power3.out'});
+</script>
+
 </body>
 </html>
