@@ -1,9 +1,7 @@
 © 2025 AlomgiR HosseN. All rights reserved Email--Alomgir.Dev@Gmail.com
-
-Interactive E-commerce Web Application FrontEnd Design.Send Me Pull Request or email me to get the copy of this Repository
-
-
-# Gleam and Geace - Jewelry & Cosmetics Shop
+# Gleam and Geace Online Shop
+Owner- Fatema Kasfia
+Email-Fatemakasfia@Gmail.com
 
 A stunning, fully-functional e-commerce web shop built with modern HTML, CSS, and JavaScript.
 
