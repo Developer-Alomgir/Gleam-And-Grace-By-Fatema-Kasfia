@@ -1,6 +1,6 @@
 © 2025 AlomgiR HosseN. All rights reserved Email--Alomgir.Dev@Gmail.com
 
-Interavtive E-commerce Webapp FrontEnd Design.Send Me Pull Request or email me to get the copy of this Repository
+Interactive E-commerce Web Application FrontEnd Design.Send Me Pull Request or email me to get the copy of this Repository
 
 
 # Gleam and Geace - Jewelry & Cosmetics Shop
