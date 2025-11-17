@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gleam And Grace - Jewelry & Ceafting</title>
+    <title>Gleam And Grace By Fatema Kasfia</title>
     <style>
         * {
             margin: 0;
@@ -925,7 +925,7 @@
             </div>
             <div class="contact-buttons">
                 <a href="tel:+8801XXXXXXXXX" class="btn btn-primary">📞 Call Now</a>
-                <a href="mailto:gleamgeace@email.com" class="btn btn-secondary">✉️ Email Us</a>
+                <a href="GleamandGrace916@Gmail.com" class="btn btn-secondary">✉️ Email Us</a>
             </div>
         </div>
 
@@ -988,7 +988,7 @@
             </div>
             <div class="developer-credit">
              © 2025 AlomgiR HosseN. All rights reserved 💻
-    <a href="https://github.com/Developer-Alomgir" class="social-link" target="_blank">Git Repository</a>
+                <a href="https://github.com/Developer-Alomgir" class="social-link" target="_blank">Git Repository</a>
             </div>
         </div>
     </div>
@@ -1005,37 +1005,37 @@
                 Total: ৳<span id="cartTotal">0</span>
             </div>
                 <div class="checkout-section">
-                    <h3>Customer Information</h3>
+                    <h3>Checkout Information</h3>
                     <div class="order-form">
                         <div class="form-group">
                             <label>Full Name *</label>
-                            <input type="text" id="customerName" placeholder="Enter your full name" required>
+                            <input type="text" id="customerName" placeholder="আপনার পুরো নাম লিখুন" required>
                         </div>
                         <div class="form-group">
                             <label>Phone Number *</label>
-                            <input type="tel" id="customerPhone" placeholder="+880 1XXX-XXXXXX" required>
+                            <input type="tel" id="customerPhone" placeholder="আপনার সাথে যোগযোগের নম্বরটি লিখুন" required>
                         </div>
                         <div class="form-group">
                             <label>Email Address</label>
-                            <input type="email" id="customerEmail" placeholder="your@email.com">
+                            <input type="email" id="customerEmail" placeholder="আপনার ইমেইল">
                         </div>
                         <div class="form-group">
                             <label>Delivery Address *</label>
-                            <textarea id="customerAddress" rows="3" placeholder="House/Flat, Road, Area, City" required></textarea>
+                            <textarea id="customerAddress" rows="3" placeholder="বাড়ির ফ্ল্যাট রোড নম্বর সহ আপনার সম্পূর্ণ ঠিকানা লিখুন।" required></textarea>
                         </div>
                         <div class="form-group">
                             <label>Additional Notes</label>
-                            <textarea id="orderNotes" rows="2" placeholder="Special instructions for delivery (optional)"></textarea>
+                            <textarea id="orderNotes" rows="2" placeholder="ডেলিভারির জন্য বিশেষ নির্দেশাবলী আমাদের জানান। (optional)"></textarea>
                         </div>
                     </div>
                     
                     <h3 style="margin-top: 20px;">Payment Method</h3>
                     <div class="payment-options">
                         <div class="payment-option" onclick="selectPayment('bkash')">
-                            📱 Bkash
+                            📱 বিকাশ (Send Money)
                         </div>
                         <div class="payment-option" onclick="selectPayment('cod')">
-                            💵 Cash on Delivery
+                            💵 ক্যাশ অন ডেলিভারি
                         </div>
                     </div>
                     
@@ -1375,7 +1375,7 @@
             toggleCart();
 
             const paymentMethod = selectedPayment === 'bkash' ? 'Bkash' : 'Cash on Delivery';
-            alert(`✅ Order placed successfully!\n\n📦 Order ID: ${orderId}\n💰 Total: ৳${total}\n💳 Payment: ${paymentMethod}\n\n👤 Customer: ${name}\n📱 Phone: ${phone}\n📍 Address: ${address}\n\nYou can track your order using the Order ID.`);
+            alert(`✅ Order placed successfully!আমাদের কাছ থেকে কেনাকাটা করার জন্য ধন্যবাদ।\n\n📦 Order ID: ${orderId}\n💰 Total: ৳${total}\n💳 Payment: ${paymentMethod}\n\n👤 Customer: ${name}\n📱 Phone: ${phone}\n📍 Address: ${address}\n\nYou can track your order using the Order ID.আপনি অর্ডার আইডি ব্যবহার করে আপনার অর্ডার ট্র্যাক করতে পারেন।`);
 
             // Reset form
             document.getElementById('customerName').value = '';
