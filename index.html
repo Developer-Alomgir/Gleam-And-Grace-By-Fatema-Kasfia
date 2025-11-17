@@ -1349,13 +1349,14 @@
             const notes = document.getElementById('orderNotes').value.trim();
 
             if (!name || !phone || !address) {
-                alert('Please fill in all required fields (Name, Phone, Address)!');
+                alert('সব ফাঁকা ঘর পূরণ করো ভাই! (নাম, ফোন, ঠিকানা দরকার)
+                      যদি না করো। তোমার পার্সেল পাশের বাড়িতে চলে যাবে।!');
                 return;
             }
 
             // Validate phone number
             if (phone.length < 11) {
-                alert('Please enter a valid phone number!');
+                alert('আরে মামা তুমি ভুল নম্বরটা লিখেছো, আবার চেক করো।!');
                 return;
             }
 
