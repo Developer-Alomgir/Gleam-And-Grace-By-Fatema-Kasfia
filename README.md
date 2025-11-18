@@ -3,6 +3,7 @@
 Owner- Fatema Kasfia
 Email-Fatemakasfia@Gmail.com
 
+
 A stunning, fully-functional e-commerce web shop built with modern HTML, CSS, and JavaScript.
 
 ## ✨ Features
@@ -19,11 +20,6 @@ A stunning, fully-functional e-commerce web shop built with modern HTML, CSS, an
 - 🎭 Typewriter animation effects
 - 💫 Animated backgrounds and shimmer effects
 
-## 🚀 Quick Start
-
-1. send me pull request for this repository
-2. Open `index.html` in your browser
-3. That's it! No build process required.
 
 ## 📱 Mobile Optimization
 
@@ -35,4 +31,5 @@ The shop is fully optimized for mobile devices with:
 - Single-column layout on small screens
 
 
-Your site will be live at:(https://gleamandgrace.vercel.app/)`
+Update Information-
+18-11-2025 : Javascript Installed 
