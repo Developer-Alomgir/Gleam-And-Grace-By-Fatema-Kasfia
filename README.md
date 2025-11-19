@@ -1,35 +1,24 @@
-© 2025 AlomgiR HosseN. All rights reserved Email--Alomgir.Dev@Gmail.com
-# Gleam and Geace Online Shop
-Owner- Fatema Kasfia
-Email-Fatemakasfia@Gmail.com
+# Gleam & Grace - Next.js version
 
+This is a generated Next.js conversion of your static site with a simple Customer Panel.
 
-A stunning, fully-functional e-commerce web shop built with modern HTML, CSS, and JavaScript.
+## How to run locally
 
-## ✨ Features
+1. Install dependencies:
+```
+npm install
+```
 
-- 🎨 Modern dark theme with purple/black gradients
-- 💎 Multiple product categories (Jewelry, Cosmetics, Watches, Bags, Pendants, Rings, Earrings, Crafting)
-- 🛒 Shopping cart with checkout functionality
-- 💳 Payment options: Bkash & Cash on Delivery
-- 📦 Order tracking system
-- 🖼️ Image upload for products and shop logo
-- 📱 Fully responsive (Mobile & Desktop)
-- ✨ Exclusive collection carousels with RTL animation
-- 👆 Touch-enabled scrolling on carousels
-- 🎭 Typewriter animation effects
-- 💫 Animated backgrounds and shimmer effects
+2. Run development server:
+```
+npm run dev
+```
 
+3. Open http://localhost:3000
 
-## 📱 Mobile Optimization
+## What is included
 
-The shop is fully optimized for mobile devices with:
-- Responsive grid layouts
-- Touch-enabled carousel scrolling
-- Mobile-friendly navigation
-- Optimized font sizes and spacing
-- Single-column layout on small screens
-
-
-Update Information-
-18-11-2025 : Javascript Installed 
+- Home page (index) converted from your HTML.
+- Customer panel at `/customer` that lists products.
+- Product detail page at `/customer/[id]` where customers can view product info.
+- Simple API routes under `/api` returning product data and handling orders (in-memory).

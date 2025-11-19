@@ -1,23 +1,16 @@
 {
-  "name": "gleam-geace-shop",
+  "name": "gleam-and-grace-next",
   "version": "1.0.0",
-  "description": "A stunning e-commerce web shop for jewelry and cosmetics",
-  "main": "index.html",
+  "private": true,
   "scripts": {
-    "start": "npx serve .",
-    "deploy": "vercel --prod"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [
-    "ecommerce",
-    "jewelry",
-    "cosmetics",
-    "shop",
-    "webshop"
-  ],
-  "author": "ALOMGIR HOSSEN",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/gleam-geace-shop.git"
+  "dependencies": {
+    "next": "14.2.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   }
 }
