@@ -1,20 +1,9 @@
-# Gleam & Grace - Next.js version
+update:::
 
-This is a generated Next.js conversion of your static site with a simple Customer Panel.
+# Gleam & Grace - Next.js Framework version
 
-## How to run locally
+Next.js Framework with a simple Customer Panel.
 
-1. Install dependencies:
-```
-npm install
-```
-
-2. Run development server:
-```
-npm run dev
-```
-
-3. Open http://localhost:3000
 
 ## What is included
 
